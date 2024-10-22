@@ -41,11 +41,11 @@ def getAthenaData(query):
     except Exception as e:
         print("Exception: {}".format(e))
 
-query = "select date(date) as date, adid, device, sum(impressions) as impressions, sum(clicks) as clicks from dbt.mart_googleads_performancereport_ads where date(date) >= current_date - interval '30' day GROUP BY 1,2,3 order by date desc, adid asc, device asc"
+query = "select date(date) as date, adid, device, sum(impressions) as impressions, sum(clicks) as clicks from dbt.mart_googleads_performancereport_ads where date(date) >= current_date - interval '30' day GROUP BY 1,2,3 order by date asc, adid asc, device asc"
 
 #get ad performance data for the last 30 days
 data = getAthenaData(query)
-# print(data.head())
+print(data.head())
 #exclude rows where an adid did not have a minumum 0f 100 ad impressions per day or where the device type is not eligible for click activity
 df = data.loc[(data['impressions'] >= 100) & (data['device'] != 'CONNECTED_TV')]
 #define a list including the unique device values in the remaining rows
@@ -71,7 +71,7 @@ df_styled = df.style.apply(style_dataframe_ctr, axis=1).format(thousands=',', hy
 #assign table attributes to leverage bootstrap 5 css classes
 df_styled = df_styled.set_table_attributes('class="table table-bordered"').hide(axis=0)
 #export the styled df to the webroot location of localhost for import via xhr into a parent html document in the same folder location
-f = open('ctrvsbenchmark.html', 'w')
+f = open('/var/www/html/ctrvsbenchmark.html', 'w')
 f.write(df_styled.to_html(table_uuid='ctrvsbenchmark'))
 f.close()
 
