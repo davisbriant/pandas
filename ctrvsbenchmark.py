@@ -70,7 +70,7 @@ df.to_csv(sep='\t', header=True, index=False, path_or_buf='ctrvsbenchmark.tsv')
 df_styled = df.style.apply(style_dataframe_ctr, axis=1).format(thousands=',', hyperlinks={'html'}, precision=2).format({'ctr': '{:.2f}%','ctr benchmark': '{:.2f}%'})
 #assign table attributes to leverage bootstrap 5 css classes
 df_styled = df_styled.set_table_attributes('class="table table-bordered"').hide(axis=0)
-#export the styled df to the webroot location of localhost for import via xhr into a parent html document in the same folder location
+#export the styled df to the webroot location of localhost and import into a parent html document via xhr in the same folder location
 f = open('/var/www/html/ctrvsbenchmark.html', 'w')
 f.write(df_styled.to_html(table_uuid='ctrvsbenchmark'))
 f.close()
